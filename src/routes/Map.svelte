@@ -1,7 +1,7 @@
 <script lang="ts">
 	import mapboxgl from 'mapbox-gl'
 	import { onMount } from 'svelte'
-	import data from '$lib/styles/streets-v12.json'
+	import data from '$lib/styles/blue.json'
 
 	mapboxgl.accessToken =
 		'pk.eyJ1IjoicGFuendhcnp5d25pYWthIiwiYSI6ImNsdGcydzFtdTB4aDgyaXJ0cDBmZTl6aHMifQ.j3j7zHRSuFDj2maiwwvgVA'
@@ -11,7 +11,7 @@
 	onMount(async () => {
 		map = new mapboxgl.Map({
 			container: 'map', // container ID
-			style: data, // style URL
+			style: 'mapbox://styles/panzwarzywniaka/clthk02hh005c01pjd92243yg', // style URL
 			center: [-74.5, 40], // starting position [lng, lat]
 			zoom: 9 // starting zoom
 		})
@@ -50,7 +50,6 @@
 
 <style>
 	#map {
-		margin: 20px;
 		width: 800px;
 		height: 600px;
 	}

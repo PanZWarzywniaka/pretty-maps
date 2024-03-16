@@ -1,5 +1,5 @@
-<header>It's header</header>
-<main>
+<header class="container">It's header</header>
+<main class="container">
 	<slot />
 </main>
-<footer>It's footer</footer>
+<footer class="container">It's footer</footer>
