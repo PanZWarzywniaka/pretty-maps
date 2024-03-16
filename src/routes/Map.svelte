@@ -1,19 +1,21 @@
 <script lang="ts">
-	import mapboxgl from 'mapbox-gl'
-	import { onMount } from 'svelte'
-	import data from '$lib/styles/blue.json'
-
+	import mapboxgl, { type FillLayer, type FillPaint, type Layer, type Style } from 'mapbox-gl'
 	mapboxgl.accessToken =
 		'pk.eyJ1IjoicGFuendhcnp5d25pYWthIiwiYSI6ImNsdGcydzFtdTB4aDgyaXJ0cDBmZTl6aHMifQ.j3j7zHRSuFDj2maiwwvgVA'
 
+	import { onMount } from 'svelte'
+	import style from '$lib/styles/default_no_labels.json'
+
+	let current_style = style as Style
+	let count = 0
 	let map: null | mapboxgl.Map = null
 
 	onMount(async () => {
 		map = new mapboxgl.Map({
 			container: 'map', // container ID
-			style: 'mapbox://styles/panzwarzywniaka/clthk02hh005c01pjd92243yg', // style URL
-			center: [-74.5, 40], // starting position [lng, lat]
-			zoom: 9 // starting zoom
+			style: current_style,
+			center: [-74, 40.7], // starting position [lng, lat]
+			zoom: 11 // starting zoom
 		})
 
 		map.on('style.load', () => {
@@ -25,28 +27,25 @@
 		})
 	})
 
-	const STYLE_PREFIX = 'mapbox://styles/mapbox/'
-	const STYLES: string[] = [
-		'standard',
-		'streets-v12',
-		'outdoors-v12',
-		'light-v11',
-		'dark-v11',
-		'satellite-streets-v12'
-	]
-	let selected: string = STYLES[0]
+	$: if (map?.loaded) {
+		map.setStyle(current_style)
+		console.log('Style reloaded')
+	}
 
-	// $: if (map !== null) {
-	// 	map.setStyle(STYLE_PREFIX + selected)
-	// }
+	function doSth() {
+		count += 1
+		let layer = current_style.layers.find((l) => l.id === 'water') as Layer
+		let paint = layer.paint as FillPaint
+		// paint['fill-color'] = "hsl(196, 80%, 70%)"
+		let new_col = `hsl(${count * 10}, 80%, 70%)`
+		paint['fill-color'] = new_col
+		map?.setStyle(current_style)
+		console.log('New col is', new_col)
+	}
 </script>
 
-<div id="map"></div>
-<select bind:value={selected}>
-	{#each STYLES as s}
-		<option value={s}>{s}</option>
-	{/each}
-</select>
+<div class="container" id="map"></div>
+<button on:click={doSth}> Spin that colour! </button>
 
 <style>
 	#map {
