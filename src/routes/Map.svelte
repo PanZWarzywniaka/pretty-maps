@@ -1,5 +1,12 @@
 <script lang="ts">
-	import mapboxgl, { type FillLayer, type FillPaint, type Layer, type Style } from 'mapbox-gl'
+	import mapboxgl, {
+		type FillLayer,
+		type FillPaint,
+		type Layer,
+		type LngLatBoundsLike,
+		type Style
+	} from 'mapbox-gl'
+
 	mapboxgl.accessToken =
 		'pk.eyJ1IjoicGFuendhcnp5d25pYWthIiwiYSI6ImNsdGcydzFtdTB4aDgyaXJ0cDBmZTl6aHMifQ.j3j7zHRSuFDj2maiwwvgVA'
 
@@ -42,14 +49,29 @@
 		map?.setStyle(current_style)
 		console.log('New col is', new_col)
 	}
+	function print() {
+		let msg: String = 'Printing: \n'
+
+		// size
+		const bounds = map?.getBounds()
+		const bbox = bounds?.toArray().flat().toString()
+
+		msg += `Bbox: ${bbox}\n`
+
+		msg += `Current style: \n ${JSON.stringify(current_style)}`
+		console.log(msg)
+		alert(msg)
+		// console.log(current_style)
+	}
 </script>
 
 <div class="container" id="map"></div>
 <button on:click={doSth}> Spin that colour! </button>
+<button on:click={print}> Print 🖨️</button>
 
 <style>
 	#map {
 		width: 800px;
-		height: 600px;
+		height: 1000px;
 	}
 </style>
