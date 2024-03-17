@@ -57,7 +57,7 @@
 		const bbox = bounds?.toArray().flat().toString()
 
 		msg += `Bbox: ${bbox}\n`
-
+		msg += `Zoom: ${map?.getZoom()} \n`
 		msg += `Current style: \n ${JSON.stringify(current_style)}`
 		console.log(msg)
 		alert(msg)
