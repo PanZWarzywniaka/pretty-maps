@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../../node_modules/mapbox-gl/dist/mapbox-gl.css'
 	import mapboxgl, {
 		type FillLayer,
 		type FillPaint,
@@ -10,7 +11,7 @@
 	mapboxgl.accessToken =
 		'pk.eyJ1IjoicGFuendhcnp5d25pYWthIiwiYSI6ImNsdGcydzFtdTB4aDgyaXJ0cDBmZTl6aHMifQ.j3j7zHRSuFDj2maiwwvgVA'
 
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import style from '$lib/styles/default_no_labels.json'
 
 	let current_style = style as Style
@@ -34,10 +35,10 @@
 		})
 	})
 
-	$: if (map?.loaded) {
-		map.setStyle(current_style)
-		console.log('Style reloaded')
-	}
+	onDestroy(() => {
+		map?.remove()
+		console.log('Map destroyed')
+	})
 
 	function doSth() {
 		count += 1
