@@ -16,6 +16,7 @@
 
 	let current_style = style as Style
 	let count = 0
+	let width = 800
 	let map: null | mapboxgl.Map = null
 
 	onMount(async () => {
@@ -26,13 +27,6 @@
 			zoom: 11 // starting zoom
 		})
 
-		map.on('style.load', () => {
-			// map?.setConfigProperty('basemap', 'showPlaceLabels', false)
-			// map?.setConfigProperty('basemap', 'showRoadLabels', false)
-			// map?.setConfigProperty('basemap', 'showTransitLabels', false)
-			// map?.setConfigProperty('basemap', 'showPointOfInterestLabels', false)
-			// map?.setConfigProperty('basemap', 'lightPreset', 'night')
-		})
 	})
 
 	onDestroy(() => {
@@ -40,7 +34,7 @@
 		console.log('Map destroyed')
 	})
 
-	function doSth() {
+	function changeCol() {
 		count += 1
 		let layer = current_style.layers.find((l) => l.id === 'water') as Layer
 		let paint = layer.paint as FillPaint
@@ -49,7 +43,9 @@
 		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
 		console.log('New col is', new_col)
+		width -= 100
 	}
+
 	function print() {
 		let msg: String = 'Printing: \n'
 
@@ -67,7 +63,7 @@
 </script>
 
 <div class="container" id="map"></div>
-<button on:click={doSth}> Spin that colour! </button>
+<button on:click={changeCol}> Spin that colour! </button>
 <button on:click={print}> Print 🖨️</button>
 
 <style>
