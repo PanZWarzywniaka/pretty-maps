@@ -1,6 +1,13 @@
 import { env } from '$env/dynamic/private'
 import type { PageServerLoad } from './$types'
 
+async function getImageUrl(response: Promise<Response>, url: string): Promise<string> {
+	return response.then(async (r) => {
+		const file_name = await r.text()
+		return url + file_name
+	})
+}
+
 export const load: PageServerLoad = async ({ setHeaders, params, fetch }) => {
 	console.log(params)
 	const width: Number = parseInt(params.width) || 12
@@ -13,13 +20,13 @@ export const load: PageServerLoad = async ({ setHeaders, params, fetch }) => {
 	if (env.LOCAL == 'true') {
 		url = 'http://localhost:3000/'
 	}
-	const response = await fetch(url, {
+	const response = fetch(url, {
 		method: 'POST',
 		body: JSON.stringify({ width, height, dpi, bbox }),
 		headers: { 'Content-Type': 'application/json' }
 	})
-	const file_name: string = await response.text()
-	const imgUrl: string = url + file_name
-	console.log(imgUrl)
-	return { url: imgUrl }
+	// const file_name: string = await response.text()
+	// const imgUrl: string = url + file_name
+	// console.log(imgUrl)
+	return { url: getImageUrl(response, url) }
 }
