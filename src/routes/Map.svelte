@@ -13,10 +13,15 @@
 
 	import { onDestroy, onMount } from 'svelte'
 	import style from '$lib/styles/default_no_labels.json'
+	import { goto } from '$app/navigation'
 
 	let current_style = style as Style
 	let count = 0
-	let width = 800
+
+	let posterWidth = 8
+	let posterHeight = 12
+	let dpi = 92
+
 	let map: null | mapboxgl.Map = null
 
 	onMount(async () => {
@@ -43,7 +48,6 @@
 		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
 		console.log('New col is', new_col)
-		width -= 100
 	}
 
 	function print() {
@@ -57,7 +61,8 @@
 		msg += `Zoom: ${map?.getZoom()} \n`
 		msg += `Current style: \n ${JSON.stringify(current_style)}`
 		console.log(msg)
-		alert(msg)
+		
+		goto(`${posterWidth}x${posterHeight}@${dpi}/${bbox}`)
 		// console.log(current_style)
 	}
 </script>
