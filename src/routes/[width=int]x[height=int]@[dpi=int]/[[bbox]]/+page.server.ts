@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ setHeaders, params, fetch }) => {
@@ -8,7 +9,10 @@ export const load: PageServerLoad = async ({ setHeaders, params, fetch }) => {
 
 	const bbox: String = params.bbox || '-74.20,40.52,-73.70,41.004'
 
-	const url = 'http://localhost:3000/'
+	let url = 'https://mapbox-map-image-export-ywplflbqsq-uc.a.run.app/'
+	if (env.LOCAL == 'true') {
+		url = 'http://localhost:3000/'
+	}
 	const response = await fetch(url, {
 		method: 'POST',
 		body: JSON.stringify({ width, height, dpi, bbox }),
