@@ -3,7 +3,8 @@
 </script>
 
 {#await data.url}
-	<p>Loading image...</p>
+	<p>Rendering your map...</p>
+	<p>It may take 30seconds</p>
 {:then url}
 	<img src={url} alt="Your map render" />
 {:catch error}

@@ -25,8 +25,8 @@ export const load: PageServerLoad = async ({ setHeaders, params, fetch }) => {
 		body: JSON.stringify({ width, height, dpi, bbox }),
 		headers: { 'Content-Type': 'application/json' }
 	})
-	// const file_name: string = await response.text()
-	// const imgUrl: string = url + file_name
-	// console.log(imgUrl)
+
+	// return a promise of image url,
+	// this promise will be automaticly awaited already on the page
 	return { url: getImageUrl(response, url) }
 }
