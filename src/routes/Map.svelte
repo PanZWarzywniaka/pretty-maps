@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../../node_modules/mapbox-gl/dist/mapbox-gl.css'
+
 	import mapboxgl, {
 		type FillLayer,
 		type FillPaint,
@@ -23,7 +24,12 @@
 	let dpi = 92
 
 	let map: null | mapboxgl.Map = null
-
+	let w: number = 400
+	let h: number = 600
+	$: {
+		console.log('New width: ', w)
+		map?.resize()
+	}
 	onMount(async () => {
 		map = new mapboxgl.Map({
 			container: 'map', // container ID
@@ -32,6 +38,7 @@
 			zoom: 11 // starting zoom
 		})
 
+		map.fitScreenCoordinates
 	})
 
 	onDestroy(() => {
@@ -48,6 +55,7 @@
 		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
 		console.log('New col is', new_col)
+		w += 100
 	}
 
 	function print() {
@@ -61,19 +69,21 @@
 		msg += `Zoom: ${map?.getZoom()} \n`
 		msg += `Current style: \n ${JSON.stringify(current_style)}`
 		console.log(msg)
-		
+
 		goto(`${posterWidth}x${posterHeight}@${dpi}/${bbox}`)
 		// console.log(current_style)
 	}
 </script>
 
-<div class="container" id="map"></div>
+<div class="container" id="map-wrap" style="width: {w}px; height: {h}px;">
+	<div id="map" />
+</div>
 <button on:click={changeCol}> Spin that colour! </button>
 <button on:click={print}> Print 🖨️</button>
 
 <style>
 	#map {
-		width: 800px;
-		height: 1000px;
+		height: 100%;
+		width: 100%;
 	}
 </style>
