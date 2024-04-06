@@ -10,9 +10,9 @@ async function getImageUrl(response: Promise<Response>, url: string): Promise<st
 
 export const load: PageServerLoad = async ({ setHeaders, params, fetch }) => {
 	console.log(params)
-	const width: Number = parseInt(params.width) || 12
-	const height: Number = parseInt(params.height) || 8
-	const dpi: Number = parseInt(params.dpi) || 96
+	const width: Number = parseFloat(params.width) || 12
+	const height: Number = parseFloat(params.height) || 8
+	const dpi: Number = parseFloat(params.dpi) || 96
 
 	const bbox: String = params.bbox || '-74.20,40.52,-73.70,41.004'
 

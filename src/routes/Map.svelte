@@ -15,19 +15,19 @@
 	import { onDestroy, onMount } from 'svelte'
 	import style from '$lib/styles/default_no_labels.json'
 	import { goto } from '$app/navigation'
+	import Size from './Size.svelte'
 
 	let current_style = style as Style
 	let count = 0
-
-	let posterWidth = 8
-	let posterHeight = 12
 	let dpi = 92
 
 	let map: null | mapboxgl.Map = null
-	let w: number = 400
-	let h: number = 600
+	let map_width_inch: number
+	let map_height_inch: number
+	let map_width_px: number = 400
+	let map_height_px: number = 600
 	$: {
-		console.log('New width: ', w)
+		console.log('New width: ', map_width_px)
 		map?.resize()
 	}
 	onMount(async () => {
@@ -55,7 +55,7 @@
 		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
 		console.log('New col is', new_col)
-		w += 100
+		map_width_px += 100
 	}
 
 	function print() {
@@ -70,16 +70,25 @@
 		msg += `Current style: \n ${JSON.stringify(current_style)}`
 		console.log(msg)
 
-		goto(`${posterWidth}x${posterHeight}@${dpi}/${bbox}`)
+		goto(`${map_width_inch}x${map_height_inch}@${dpi}/${bbox}`)
 		// console.log(current_style)
 	}
 </script>
 
-<div class="container" id="map-wrap" style="width: {w}px; height: {h}px;">
+<div class="container" id="map-wrap" style="width: {map_width_px}px; height: {map_height_px}px;">
 	<div id="map" />
 </div>
-<button on:click={changeCol}> Spin that colour! </button>
-<button on:click={print}> Print 🖨️</button>
+
+<div class="container" id="control-panel">
+	<div class="container">
+		<button on:click={changeCol}> Spin that colour! </button>
+		<button on:click={print}> Print 🖨️</button>
+	</div>
+	<div class="container" id="sizes">
+		<p>Chosen size: {map_width_inch} in x {map_height_inch} in</p>
+		<Size bind:width={map_width_inch} bind:height={map_height_inch} />
+	</div>
+</div>
 
 <style>
 	#map {
