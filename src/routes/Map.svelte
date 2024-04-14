@@ -24,18 +24,16 @@
 	let map: null | mapboxgl.Map = null
 	let map_width_inch: number
 	let map_height_inch: number
+	let zoom: number
 	let map_width_px: number = 400
 	let map_height_px: number = 600
-	$: {
-		console.log('New width: ', map_width_px)
-		map?.resize()
-	}
+
 	onMount(async () => {
 		map = new mapboxgl.Map({
 			container: 'map', // container ID
 			style: current_style,
 			center: [-74, 40.7], // starting position [lng, lat]
-			zoom: 11 // starting zoom
+			zoom: zoom // starting zoom
 		})
 
 		map.fitScreenCoordinates
@@ -46,6 +44,10 @@
 		console.log('Map destroyed')
 	})
 
+	$: {
+		map?.zoomTo(zoom)
+	}
+
 	function changeCol() {
 		count += 1
 		let layer = current_style.layers.find((l) => l.id === 'water') as Layer
@@ -54,8 +56,6 @@
 		let new_col = `hsl(${count * 10}, 80%, 70%)`
 		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
-		console.log('New col is', new_col)
-		map_width_px += 100
 	}
 
 	function print() {
@@ -86,7 +86,7 @@
 	</div>
 	<div class="container" id="sizes">
 		<p>Chosen size: {map_width_inch} in x {map_height_inch} in</p>
-		<Size bind:width={map_width_inch} bind:height={map_height_inch} />
+		<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
 	</div>
 </div>
 
