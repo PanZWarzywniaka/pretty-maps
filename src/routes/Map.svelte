@@ -1,32 +1,31 @@
 <script lang="ts">
 	import '../../node_modules/mapbox-gl/dist/mapbox-gl.css'
 
-	import mapboxgl, {
-		type FillLayer,
-		type FillPaint,
-		type Layer,
-		type LngLatBoundsLike,
-		type Style
-	} from 'mapbox-gl'
+	import mapboxgl, { type Style } from 'mapbox-gl'
 
 	mapboxgl.accessToken =
 		'pk.eyJ1IjoicGFuendhcnp5d25pYWthIiwiYSI6ImNsdGcydzFtdTB4aDgyaXJ0cDBmZTl6aHMifQ.j3j7zHRSuFDj2maiwwvgVA'
 
 	import { onDestroy, onMount } from 'svelte'
-	import style from '$lib/styles/default_no_labels.json'
 	import { goto } from '$app/navigation'
-	import Size from './Size.svelte'
 
-	let current_style = style as Style
-	let count = 0
-	let dpi = 92
+	import Size from './pickers/Size.svelte'
+	import Colour from './pickers/Colour.svelte'
+
+	// map size on screen
+	let MAP_WIDTH_PX: number = 400
+	let MAP_HEIGHT_PX: number = 600
 
 	let map: null | mapboxgl.Map = null
+
+	//exported from size picker
 	let map_width_inch: number
 	let map_height_inch: number
 	let zoom: number
-	let map_width_px: number = 400
-	let map_height_px: number = 600
+
+	//exported from style picker
+	let current_style: Style
+	let dpi = 92
 
 	onMount(async () => {
 		map = new mapboxgl.Map({
@@ -35,8 +34,6 @@
 			center: [-74, 40.7], // starting position [lng, lat]
 			zoom: zoom // starting zoom
 		})
-
-		map.fitScreenCoordinates
 	})
 
 	onDestroy(() => {
@@ -46,15 +43,6 @@
 
 	$: {
 		map?.zoomTo(zoom)
-	}
-
-	function changeCol() {
-		count += 1
-		let layer = current_style.layers.find((l) => l.id === 'water') as Layer
-		let paint = layer.paint as FillPaint
-		// paint['fill-color'] = "hsl(196, 80%, 70%)"
-		let new_col = `hsl(${count * 10}, 80%, 70%)`
-		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
 	}
 
@@ -76,15 +64,12 @@
 </script>
 
 <div class="grid">
-	<div class="container" id="map-wrap" style="width: {map_width_px}px; height: {map_height_px}px;">
+	<div class="container" id="map-wrap" style="width: {MAP_WIDTH_PX}px; height: {MAP_HEIGHT_PX}px;">
 		<div id="map" />
 	</div>
 	<div class="container" id="control-panel">
-		<button on:click={changeCol}> Spin that colour! </button>
-		<div class="container" id="sizes">
-			<p>Chosen size: {map_width_inch} in x {map_height_inch} in</p>
-			<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
-		</div>
+		<Colour bind:current_style></Colour>
+		<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
 		<button on:click={print}> Print 🖨️</button>
 	</div>
 </div>
@@ -97,5 +82,10 @@
 
 	#map-wrap {
 		padding: 10px;
+	}
+
+	.container > * {
+		margin-bottom: 10px;
+		margin-top: 10px;
 	}
 </style>

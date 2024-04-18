@@ -38,11 +38,11 @@
 
 <select bind:value={selected} on:change={changeSize}>
 	<option selected disabled value="">Select size</option>
-	<optgroup disabled label="European standards (cm)">
+	<!-- <optgroup disabled label="European standards (cm)">
 		{#each eu_sizes as size}
 			<option value={size}>{size}</option>
 		{/each}
-	</optgroup>
+	</optgroup> -->
 	<optgroup label="American standards (inch)">
 		{#each us_sizes as size}
 			<option value={size}>{size}</option>
