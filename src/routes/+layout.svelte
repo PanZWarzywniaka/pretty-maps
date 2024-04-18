@@ -1,7 +1,7 @@
 <div id="page-container">
 	<header class="container">
 		<nav>
-			<a href="/"><h1>Pretty map generator</h1></a>
+			<a href="/"><h1>Pretty maps</h1></a>
 		</nav>
 	</header>
 	<main class="container">

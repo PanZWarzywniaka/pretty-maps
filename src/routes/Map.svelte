@@ -11,6 +11,7 @@
 
 	import Size from './pickers/Size.svelte'
 	import Colour from './pickers/Colour.svelte'
+	import Quality from './pickers/Quality.svelte'
 
 	// map size on screen
 	let MAP_WIDTH_PX: number = 400
@@ -25,7 +26,9 @@
 
 	//exported from style picker
 	let current_style: Style
-	let dpi = 92
+
+	//exported from Quality picker
+	let dpi: number
 
 	onMount(async () => {
 		map = new mapboxgl.Map({
@@ -70,6 +73,7 @@
 	<div class="container" id="control-panel">
 		<Colour bind:current_style></Colour>
 		<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
+		<Quality bind:dpi></Quality>
 		<button on:click={print}> Print 🖨️</button>
 	</div>
 </div>
