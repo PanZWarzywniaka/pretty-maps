@@ -75,18 +75,17 @@
 	}
 </script>
 
-<div class="container" id="map-wrap" style="width: {map_width_px}px; height: {map_height_px}px;">
-	<div id="map" />
-</div>
-
-<div class="container" id="control-panel">
-	<div class="container">
-		<button on:click={changeCol}> Spin that colour! </button>
-		<button on:click={print}> Print 🖨️</button>
+<div class="grid">
+	<div class="container" id="map-wrap" style="width: {map_width_px}px; height: {map_height_px}px;">
+		<div id="map" />
 	</div>
-	<div class="container" id="sizes">
-		<p>Chosen size: {map_width_inch} in x {map_height_inch} in</p>
-		<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
+	<div class="container" id="control-panel">
+		<button on:click={changeCol}> Spin that colour! </button>
+		<div class="container" id="sizes">
+			<p>Chosen size: {map_width_inch} in x {map_height_inch} in</p>
+			<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
+		</div>
+		<button on:click={print}> Print 🖨️</button>
 	</div>
 </div>
 
@@ -94,5 +93,9 @@
 	#map {
 		height: 100%;
 		width: 100%;
+	}
+
+	#map-wrap {
+		padding: 10px;
 	}
 </style>
