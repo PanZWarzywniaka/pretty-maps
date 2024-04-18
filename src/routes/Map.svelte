@@ -37,6 +37,11 @@
 			center: [-74, 40.7], // starting position [lng, lat]
 			zoom: zoom // starting zoom
 		})
+		// disable map rotation using right click + drag
+		map.dragRotate.disable()
+
+		// disable map rotation using touch rotation gesture
+		map.touchZoomRotate.disableRotation()
 	})
 
 	onDestroy(() => {
