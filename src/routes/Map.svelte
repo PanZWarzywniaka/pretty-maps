@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../../node_modules/mapbox-gl/dist/mapbox-gl.css'
+
 	import mapboxgl, {
 		type FillLayer,
 		type FillPaint,
@@ -14,30 +15,38 @@
 	import { onDestroy, onMount } from 'svelte'
 	import style from '$lib/styles/default_no_labels.json'
 	import { goto } from '$app/navigation'
+	import Size from './Size.svelte'
 
 	let current_style = style as Style
 	let count = 0
-
-	let posterWidth = 8
-	let posterHeight = 12
 	let dpi = 92
 
 	let map: null | mapboxgl.Map = null
+	let map_width_inch: number
+	let map_height_inch: number
+	let zoom: number
+	let map_width_px: number = 400
+	let map_height_px: number = 600
 
 	onMount(async () => {
 		map = new mapboxgl.Map({
 			container: 'map', // container ID
 			style: current_style,
 			center: [-74, 40.7], // starting position [lng, lat]
-			zoom: 11 // starting zoom
+			zoom: zoom // starting zoom
 		})
 
+		map.fitScreenCoordinates
 	})
 
 	onDestroy(() => {
 		map?.remove()
 		console.log('Map destroyed')
 	})
+
+	$: {
+		map?.zoomTo(zoom)
+	}
 
 	function changeCol() {
 		count += 1
@@ -47,7 +56,6 @@
 		let new_col = `hsl(${count * 10}, 80%, 70%)`
 		paint['fill-color'] = new_col
 		map?.setStyle(current_style)
-		console.log('New col is', new_col)
 	}
 
 	function print() {
@@ -61,19 +69,33 @@
 		msg += `Zoom: ${map?.getZoom()} \n`
 		msg += `Current style: \n ${JSON.stringify(current_style)}`
 		console.log(msg)
-		
-		goto(`${posterWidth}x${posterHeight}@${dpi}/${bbox}`)
+
+		goto(`${map_width_inch}x${map_height_inch}@${dpi}/${bbox}`)
 		// console.log(current_style)
 	}
 </script>
 
-<div class="container" id="map"></div>
-<button on:click={changeCol}> Spin that colour! </button>
-<button on:click={print}> Print 🖨️</button>
+<div class="grid">
+	<div class="container" id="map-wrap" style="width: {map_width_px}px; height: {map_height_px}px;">
+		<div id="map" />
+	</div>
+	<div class="container" id="control-panel">
+		<button on:click={changeCol}> Spin that colour! </button>
+		<div class="container" id="sizes">
+			<p>Chosen size: {map_width_inch} in x {map_height_inch} in</p>
+			<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
+		</div>
+		<button on:click={print}> Print 🖨️</button>
+	</div>
+</div>
 
 <style>
 	#map {
-		width: 800px;
-		height: 1000px;
+		height: 100%;
+		width: 100%;
+	}
+
+	#map-wrap {
+		padding: 10px;
 	}
 </style>
