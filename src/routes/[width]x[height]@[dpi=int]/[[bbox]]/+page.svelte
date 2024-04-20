@@ -1,10 +1,21 @@
 <script lang="ts">
 	export let data
+
+	let seconds_waiting = 0
+	setInterval(() => (seconds_waiting += 1), 1000)
 </script>
 
 <article>
 	{#await data.url}
-		<span aria-busy="true">Generating your map...</span>
+		<p>
+			<span aria-busy="true">Generating your map...</span>
+		</p>
+		{#if seconds_waiting > 10}
+			<p>
+				<span>This might take 30 seconds</span>
+				<progress />
+			</p>
+		{/if}
 	{:then url}
 		<dialog open>
 			<article>
