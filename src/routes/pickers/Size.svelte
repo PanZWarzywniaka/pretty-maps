@@ -36,7 +36,7 @@
 	}
 </script>
 
-<section>
+<article>
 	<select bind:value={selected} on:change={changeSize}>
 		<option selected disabled value="">Select size</option>
 		<!-- <optgroup disabled label="European standards (cm)">
@@ -50,4 +50,4 @@
 			{/each}
 		</optgroup>
 	</select>
-</section>
+</article>

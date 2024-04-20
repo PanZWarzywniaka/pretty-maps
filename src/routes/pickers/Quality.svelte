@@ -15,7 +15,7 @@
 	export let dpi: number = quality_options[0][0]
 </script>
 
-<section>
+<article>
 	<p>Selected quality: {dpi} DPI</p>
 	<progress value={$progress} />
 	<div class="grid">
@@ -30,7 +30,7 @@
 			</button>
 		{/each}
 	</div>
-</section>
+</article>
 
 <style>
 </style>
