@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation'
+
 	export let data
 
 	let seconds_waiting = 0
@@ -12,7 +14,7 @@
 		</p>
 		{#if seconds_waiting > 10}
 			<p>
-				<span>This might take 30 seconds</span>
+				<span>This might take up to 30 seconds...</span>
 				<progress />
 			</p>
 		{/if}
@@ -25,8 +27,9 @@
 					</p>
 				</header>
 				<img src={url} alt="Your map render" />
-				<footer>
-					<a href="/">Generate more maps!</a>
+				<footer class="grid">
+					<button on:click={() => (window.location.href = url)}> Download 🖨️</button>
+					<button on:click={() => goto('/')}>Generate more 🗺️</button>
 				</footer>
 			</article>
 		</dialog>
