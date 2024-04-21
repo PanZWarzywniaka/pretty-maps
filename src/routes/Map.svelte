@@ -47,10 +47,8 @@
 		console.log('Map destroyed')
 	})
 
-	$: {
-		map?.zoomTo(zoom)
-		map?.setStyle($styleStore as Style)
-	}
+	$: map?.zoomTo(zoom)
+	$: map?.setStyle($styleStore as Style)
 
 	function print() {
 		let msg: String = 'Printing: \n'
