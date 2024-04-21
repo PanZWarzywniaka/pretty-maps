@@ -23,9 +23,11 @@
 			new_width *= CM_TO_INCH
 			new_height *= CM_TO_INCH
 		}
+		console.log('OLD: ', width, height)
+		console.log('NEW: ', new_width, new_height)
 
-		// if new size if bigger zoom out
-		new_width < width ? zoom.increase() : zoom.decrease()
+		if (new_width < width) zoom.increase()
+		else if (new_width > width) zoom.decrease()
 
 		width = new_width
 		height = new_height
