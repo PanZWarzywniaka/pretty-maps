@@ -13,6 +13,7 @@
 	import StylePicker from './pickers/StylePicker.svelte'
 	import Quality from './pickers/Quality.svelte'
 	import { styleStore } from '$lib/stores/style'
+	import { zoom } from '$lib/stores/zoom'
 
 	// map size on screen
 	let MAP_WIDTH_PX: number = 400
@@ -23,7 +24,6 @@
 	//exported from size picker
 	let map_width_inch: number
 	let map_height_inch: number
-	let zoom: number
 
 	//exported from Quality picker
 	let dpi: number
@@ -33,13 +33,18 @@
 			container: 'map', // container ID
 			style: $styleStore as Style,
 			center: [-74, 40.7], // starting position [lng, lat]
-			zoom: zoom // starting zoom
+			zoom: $zoom // starting zoom
 		})
 		// disable map rotation using right click + drag
 		map.dragRotate.disable()
 
 		// disable map rotation using touch rotation gesture
 		map.touchZoomRotate.disableRotation()
+
+		map.on('zoomend', () => {
+			zoom.set(map?.getZoom() ?? 0)
+			console.log('New zoom ', $zoom)
+		})
 	})
 
 	onDestroy(() => {
@@ -47,7 +52,10 @@
 		console.log('Map destroyed')
 	})
 
-	$: map?.zoomTo(zoom)
+	$: {
+		console.log('Zoom changed: ', $zoom)
+		map?.zoomTo($zoom)
+	}
 	$: map?.setStyle($styleStore as Style)
 
 	function print() {
@@ -73,7 +81,7 @@
 	</div>
 	<section class="container" id="control-panel">
 		<StylePicker />
-		<Size bind:zoom bind:width={map_width_inch} bind:height={map_height_inch} />
+		<Size bind:width={map_width_inch} bind:height={map_height_inch} />
 		<Quality bind:dpi></Quality>
 		<button on:click={print}> Print 🖨️</button>
 	</section>

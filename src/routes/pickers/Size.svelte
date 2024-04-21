@@ -1,13 +1,12 @@
 <script lang="ts">
+	import { zoom } from '$lib/stores/zoom'
+
 	const DEFAULT_WIDTH = 8
 	const DEFAULT_HEIGHT = 12
-	const DEFAULT_ZOOM = 11
 	const CM_TO_INCH = 0.3937
-	const ZOOM_CHANGE = 0.3
 
 	export let width: number = DEFAULT_WIDTH
 	export let height: number = DEFAULT_HEIGHT
-	export let zoom: number = DEFAULT_ZOOM
 
 	let selected: string
 	let eu_sizes = ['30x40cm', '50x70cm', '70x100cm']
@@ -25,11 +24,8 @@
 			new_height *= CM_TO_INCH
 		}
 
-		if (new_width > width) {
-			zoom -= ZOOM_CHANGE //zoom out for bigger canvas
-		} else {
-			zoom += ZOOM_CHANGE //zoom in for smaller canvas
-		}
+		// if new size if bigger zoom out
+		new_width < width ? zoom.increase() : zoom.decrease()
 
 		width = new_width
 		height = new_height
