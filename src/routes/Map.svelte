@@ -7,12 +7,6 @@
 		'pk.eyJ1IjoicGFuendhcnp5d25pYWthIiwiYSI6ImNsdGcydzFtdTB4aDgyaXJ0cDBmZTl6aHMifQ.j3j7zHRSuFDj2maiwwvgVA'
 
 	import { onDestroy, onMount } from 'svelte'
-	import { goto } from '$app/navigation'
-
-	import SizePicker from './panels/SizePicker.svelte'
-	import StylePicker from './panels/StylePicker.svelte'
-	import QualityPicker from './panels/QualityPicker.svelte'
-	import Print from './panels/Print.svelte'
 	import { styleStore } from '$lib/stores/style'
 	import { zoom } from '$lib/stores/zoom'
 	import { bounds } from '$lib/stores/printOptions'
@@ -56,16 +50,8 @@
 	$: map?.setStyle($styleStore as Style)
 </script>
 
-<div class="grid">
-	<div class="container" id="map-wrap" style="width: {MAP_WIDTH_PX}px; height: {MAP_HEIGHT_PX}px;">
-		<div id="map" />
-	</div>
-	<section class="container" id="control-panel">
-		<StylePicker />
-		<SizePicker />
-		<QualityPicker />
-		<Print />
-	</section>
+<div class="container" id="map-wrap" style="width: {MAP_WIDTH_PX}px; height: {MAP_HEIGHT_PX}px;">
+	<div id="map" />
 </div>
 
 <style>

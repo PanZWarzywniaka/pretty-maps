@@ -1,5 +1,9 @@
 <script lang="ts">
+	import ControlPanel from './ControlPanel.svelte'
 	import Map from './Map.svelte'
 </script>
 
-<Map />
+<div class="grid">
+	<Map />
+	<ControlPanel />
+</div>
