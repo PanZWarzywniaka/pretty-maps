@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dpi } from '$lib/stores/printOptions'
 	import { tweened } from 'svelte/motion'
 
 	// % , Label, DPI value
@@ -11,18 +12,16 @@
 	const progress = tweened(0.33, {
 		duration: 1000
 	})
-
-	export let dpi: number = quality_options[0][0]
 </script>
 
 <article>
-	<p>Selected quality: {dpi} DPI</p>
+	<p>Selected quality: {$dpi} DPI</p>
 	<progress value={$progress} />
 	<div class="grid">
 		{#each quality_options as option}
 			<button
 				on:click={() => {
-					dpi = option[0]
+					$dpi = option[0]
 					progress.set(option[1])
 				}}
 			>
