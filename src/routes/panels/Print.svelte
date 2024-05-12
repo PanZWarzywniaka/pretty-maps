@@ -13,7 +13,8 @@
 		// msg += `Current style: \n ${JSON.stringify($styleStore)}`
 		console.log(msg)
 
-		goto(`${$width}x${$height}@${$dpi}/${bbox}`)
+		let waterCol = styleStore.getWaterColor()
+		goto(`${$width}x${$height}@${$dpi}/${bbox}?waterCol=${waterCol}`)
 		// console.log(current_style)
 	}
 </script>

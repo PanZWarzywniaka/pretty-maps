@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import { get, writable } from 'svelte/store'
 import defaultStyle from '$lib/styles/default_no_labels.json'
 import type { FillPaint, Layer, Style } from 'mapbox-gl'
 
@@ -24,10 +24,19 @@ function createStyleStore() {
 		})
 	}
 
+	function getWaterColor() {
+		const currentStyle = get(styleStore) // Get current style from store
+		const layer = currentStyle.layers.find((l) => l.id === 'water') as Layer
+		const paint = layer.paint as FillPaint
+
+		return paint['fill-color'] as string
+	}
+
 	return {
 		subscribe,
 		reset,
-		spinColour
+		spinColour,
+		getWaterColor
 	}
 }
 
